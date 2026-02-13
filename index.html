@@ -3,615 +3,567 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEURAL CONNECTION PROTOCOL v2.0 | Future Love System 💫</title>
+    <title>Snake Game 🐍</title>
     <style>
         * {
             margin: 0;
-  \          padding: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Courier New', monospace;
-            height: 100vh;
-            background: #0a0e27;
+            font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            position: relative;
-            color: #00ff99;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
             width: 100%;
-            height: 100%;
-            background-image:
-                repeating-linear-gradient(
-                    0deg,
-                    rgba(0, 255, 153, 0.03) 0px,
-                    rgba(0, 255, 153, 0.03) 1px,
-                    transparent 1px,
-                    transparent 2px
-                ),
-                repeating-linear-gradient(
-                    90deg,
-                    rgba(0, 255, 153, 0.03) 0px,
-                    rgba(0, 255, 153, 0.03) 1px,
-                    transparent 1px,
-                    transparent 2px
-                );
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .container {
-            text-align: center;
-            background: rgba(15, 25, 60, 0.9);
-            padding: 50px 40px;
-            border-radius: 0;
-            border: 2px solid #00ff99;
-            box-shadow: 0 0 30px rgba(0, 255, 153, 0.5), inset 0 0 20px rgba(0, 255, 153, 0.1);
-            max-width: 600px;
-            width: 90%;
-            animation: slideIn 0.6s ease-out;
-            position: relative;
-            z-index: 10;
-            backdrop-filter: blur(10px);
-        }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #ff006e, transparent);
-            animation: scanline 3s linear infinite;
-        }
-
-        @keyframes scanline {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .heart-animation {
-            font-size: 60px;
-            margin-bottom: 20px;
-            animation: heartBeat 0.6s ease-in-out infinite;
-            filter: drop-shadow(0 0 10px #00ff99);
-        }
-
-        @keyframes heartBeat {
-            0%, 100% {
-                transform: scale(1);
-            }
-            25% {
-                transform: scale(1.2);
-            }
-            50% {
-                transform: scale(1);
-            }
-        }
-
-        button {
-            padding: 15px 40px;
-            font-size: 16px;
-            border: 2px solid #00ff99;
-            border-radius: 0;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            background: transparent;
-            font-family: 'Courier New', monospace;
-            position: relative;
-        }
-
-        .yes-btn {
-            background: rgba(0, 255, 153, 0.1);
-            color: #00ff99;
-            flex: 1;
-            min-width: 120px;
-            box-shadow: 0 0 15px rgba(0, 255, 153, 0.5);
-            text-shadow: 0 0 10px #00ff99;
-        }
-
-        .yes-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px rgba(0, 255, 153, 0.8), inset 0 0 10px rgba(0, 255, 153, 0.2);
-            background: rgba(0, 255, 153, 0.2);
-        }
-
-        .no-btn {
-            background: rgba(255, 0, 110, 0.1);
-            color: #ff006e;
-            flex: 1;
-            min-width: 120px;
-            border-color: #ff006e;
-            box-shadow: 0 0 15px rgba(255, 0, 110, 0.5);
-            text-shadow: 0 0 10px #ff006e;
-        }
-
-        .no-btn:hover {
-            background: rgba(255, 0, 110, 0.2);
-            transform: translateX(10px);
-            box-shadow: 0 0 30px rgba(255, 0, 110, 0.8), inset 0 0 10px rgba(255, 0, 110, 0.2);
         }
 
         h1 {
-            color: #00ff99;
-            font-size: 36px;
+            color: #333;
             margin-bottom: 20px;
-            line-height: 1.4;
-            text-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99;
-            font-weight: bold;
-            letter-spacing: 2px;
+            text-align: center;
+            font-size: 32px;
         }
 
-        .message {
-            color: #00ccff;
-            font-size: 16px;
-            margin-bottom: 30px;
-            line-height: 1.8;
-            font-weight: 300;
-            text-shadow: 0 0 5px #00ccff;
-        }
-
-        .button-group {
+        .score-board {
             display: flex;
-            gap: 15px;
+            gap: 30px;
             justify-content: center;
+            margin-bottom: 20px;
+            width: 100%;
             flex-wrap: wrap;
         }
 
-        .color-picker-section {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(15, 25, 60, 0.8);
-            padding: 15px;
-            border-radius: 0;
+        .score-item {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            min-width: 120px;
+        }
+
+        .score-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            font-size: 24px;
+        }
+
+        #gameBoard {
+            width: 100%;
+            aspect-ratio: 1;
+            max-width: 400px;
+            background-color: #1a1a1a;
+            border: 3px solid #667eea;
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            grid-template-rows: repeat(20, 1fr);
+            gap: 0;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .cell {
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a;
+            border: 0.5px solid #333;
+        }
+
+        .snake {
+            background-color: #4caf50;
+            border-radius: 2px;
+        }
+
+        .snake.head {
+            background-color: #45a049;
+            box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .food {
+            background-color: #ff5722;
+            border-radius: 50%;
+            animation: pulse 0.6s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.8); }
+        }
+
+        .controls {
             display: flex;
             gap: 10px;
-            border: 2px solid #00ccff;
             flex-wrap: wrap;
             justify-content: center;
-            max-width: 250px;
-            box-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
+            margin-bottom: 20px;
         }
 
-        .color-btn {
-            width: 30px;
-            height: 30px;
-            border: 2px solid #00ff99;
-            border-radius: 0;
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .color-btn:hover {
-            transform: scale(1.2);
-            box-shadow: 0 0 20px rgba(0, 255, 153, 0.8);
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
-        .color-btn.active {
-            border: 3px solid #ff006e;
-            transform: scale(1.2);
-            box-shadow: 0 0 20px #ff006e;
+        button:active {
+            transform: translateY(0);
         }
 
-        .red { background: linear-gradient(135deg, #ff0000, #ff6b6b); }
-        .orange { background: linear-gradient(135deg, #ff7f00, #ffb84d); }
-        .yellow { background: linear-gradient(135deg, #ffff00, #ffff99); }
-        .green { background: linear-gradient(135deg, #00ff00, #66ff66); }
-        .blue { background: linear-gradient(135deg, #0000ff, #6b6bff); }
-        .purple { background: linear-gradient(135deg, #9400d3, #d966ff); }
-        .pink { background: linear-gradient(135deg, #ff00ff, #ff66ff); }
-        .rainbow { background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3); }
-
-        /* Animal Styles - Hidden for futuristic theme */
-        .animal {
-            position: absolute;
-            font-size: 40px;
-            animation: wiggle 2s ease-in-out infinite;
-            opacity: 0.15;
-            filter: blur(1px);
+        .direction-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 70px);
+            grid-template-rows: repeat(3, 70px);
+            gap: 8px;
+            margin: 20px 0;
+            justify-content: center;
         }
 
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(-2deg); }
-            50% { transform: rotate(2deg); }
+        .dir-btn {
+            padding: 0;
+            font-size: 24px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
         }
 
-        .animal-dog {
-            top: 15%;
-            left: 10%;
-            animation: bounce 1s infinite, wiggle 2s ease-in-out infinite;
+        .dir-btn:hover {
+            transform: scale(1.1);
         }
 
-        .animal-cat {
-            top: 20%;
-            right: 12%;
-            animation: float-up 3s ease-in-out infinite, wiggle 2s ease-in-out infinite;
+        .dir-btn:active {
+            transform: scale(0.95);
         }
 
-        .animal-rabbit {
-            bottom: 15%;
-            left: 8%;
-            animation: hop 1.5s infinite, wiggle 2s ease-in-out infinite;
+        .dir-btn.up { grid-column: 2; grid-row: 1; }
+        .dir-btn.left { grid-column: 1; grid-row: 2; }
+        .dir-btn.down { grid-column: 2; grid-row: 3; }
+        .dir-btn.right { grid-column: 3; grid-row: 2; }
+
+        .game-status {
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+            min-height: 30px;
+            margin-bottom: 15px;
+            font-weight: bold;
         }
 
-        .animal-bear {
-            bottom: 12%;
-            right: 10%;
-            animation: sway 2.5s ease-in-out infinite, wiggle 2s ease-in-out infinite;
+        .game-status.playing {
+            color: #4caf50;
         }
 
-        .animal-fox {
-            top: 45%;
-            left: 5%;
-            animation: drift 3s ease-in-out infinite, wiggle 2s ease-in-out infinite;
+        .game-status.game-over {
+            color: #ff5722;
         }
 
-        .animal-panda {
-            top: 50%;
-            right: 6%;
-            animation: spin-slow 4s linear infinite, wiggle 2s ease-in-out infinite;
+        .info {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes float-up {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        @keyframes hop {
-            0%, 100% { transform: translateY(0) scaleY(1); }
-            50% { transform: translateY(-12px) scaleY(0.95); }
-        }
-
-        @keyframes sway {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(8px); }
-        }
-
-        @keyframes drift {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            25% { transform: translateY(-5px) translateX(5px); }
-            50% { transform: translateY(0) translateX(0); }
-            75% { transform: translateY(5px) translateX(-5px); }
-        }
-
-        @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Many Hearts Styles */
-        .floating-hearts {
-            position: fixed;
-            font-size: 25px;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.1;
-        }
-
-        @keyframes floatUp {
-            0% {
-                bottom: -50px;
-                opacity: 0.1;
-            }
-            100% {
-                bottom: 100vh;
-                opacity: 0;
-            }
-        }
-
-        @keyframes floatLeft {
-            0% {
-                right: -50px;
-                opacity: 0.1;
-            }
-            100% {
-                right: 100vw;
-                opacity: 0;
-            }
-        }
-
-        @keyframes floatRight {
-            0% {
-                left: -50px;
-                opacity: 0.1;
-            }
-            100% {
-                left: 100vw;
-                opacity: 0;
-            }
-        }
-
-        @keyframes pulse-hearts {
-            0%, 100% { transform: scale(1) glow(2px); }
-            50% { transform: scale(1.3); }
-        }
-
-        @keyframes twirl {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-            50% {
-                transform: translate(20px, -20px) rotate(180deg);
-            }
-            100% {
-                transform: translate(0, -100vh) rotate(360deg);
-            }
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
-
-        @keyframes neon-flicker {
-            0%, 18%, 22%, 25%, 54%, 56%, 100% { 
-                text-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99;
-            }
-            20%, 24%, 55% { 
-                text-shadow: 0 0 5px #00ff99;
-            }
-        }
-
-        .heart-up { animation: floatUp 3s linear infinite; }
-        .heart-left { animation: floatLeft 4s ease-in infinite; }
-        .heart-right { animation: floatRight 4s ease-in infinite; }
-        .heart-pulse { animation: pulse-hearts 1.5s ease-in-out infinite; }
-        .heart-twirl { animation: twirl 5s ease-in-out infinite; }
-
-        /* Heart positions */
-        .h1 { left: 10%; }
-        .h2 { left: 20%; }
-        .h3 { left: 30%; }
-        .h4 { left: 40%; }
-        .h5 { left: 50%; }
-        .h6 { left: 60%; }
-        .h7 { left: 70%; }
-        .h8 { left: 80%; }
-        .h9 { left: 90%; }
-        .h10 { right: 15%; bottom: 10%; }
-        .h11 { right: 25%; bottom: 20%; }
-        .h12 { left: 5%; top: 30%; }
-        .h13 { right: 5%; top: 40%; }
-        .h14 { left: 15%; bottom: 25%; }
-        .h15 { right: 20%; top: 20%; }
-
+        /* Mobile Responsiveness */
         @media (max-width: 600px) {
-            .color-picker-section {
-                top: 10px;
-                right: 10px;
-                padding: 10px;
+            .game-container {
+                padding: 20px;
+                border-radius: 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+
+            .score-board {
+                gap: 15px;
+                margin-bottom: 15px;
+            }
+
+            .score-item {
+                padding: 12px 18px;
+                min-width: 100px;
+            }
+
+            .score-label {
+                font-size: 11px;
+            }
+
+            .score-value {
+                font-size: 20px;
+            }
+
+            button {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+
+            .direction-buttons {
+                grid-template-columns: repeat(3, 60px);
+                grid-template-rows: repeat(3, 60px);
                 gap: 6px;
+                margin: 15px 0;
             }
 
-            .color-btn {
-                width: 25px;
-                height: 25px;
+            .dir-btn {
+                font-size: 20px;
             }
 
-            .animal {
-                font-size: 30px;
+            .info {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .game-container {
+                padding: 15px;
             }
 
-            .animal-dog { top: 10%; left: 5%; }
-            .animal-cat { top: 15%; right: 8%; }
-            .animal-rabbit { bottom: 12%; left: 4%; }
-            .animal-bear { bottom: 10%; right: 6%; }
-            .animal-fox { top: 40%; left: 2%; font-size: 28px; }
-            .animal-panda { top: 45%; right: 3%; font-size: 28px; }
+            h1 {
+                font-size: 20px;
+                margin-bottom: 12px;
+            }
 
-            .floating-hearts {
+            .score-board {
+                gap: 10px;
+            }
+
+            .score-item {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+
+            .score-value {
+                font-size: 18px;
+            }
+
+            button {
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+
+            .direction-buttons {
+                grid-template-columns: repeat(3, 50px);
+                grid-template-rows: repeat(3, 50px);
+                gap: 5px;
+            }
+
+            .dir-btn {
                 font-size: 18px;
             }
         }
     </style>
-    </style>
 </head>
 <body>
-    <div class="color-picker-section">
-        <button class="color-btn rainbow active" onclick="changeTheme('rainbow')" title="Rainbow"></button>
-        <button class="color-btn red" onclick="changeTheme('red')" title="Red"></button>
-        <button class="color-btn orange" onclick="changeTheme('orange')" title="Orange"></button>
-        <button class="color-btn yellow" onclick="changeTheme('yellow')" title="Yellow"></button>
-        <button class="color-btn green" onclick="changeTheme('green')" title="Green"></button>
-        <button class="color-btn blue" onclick="changeTheme('blue')" title="Blue"></button>
-        <button class="color-btn purple" onclick="changeTheme('purple')" title="Purple"></button>
-        <button class="color-btn pink" onclick="changeTheme('pink')" title="Pink"></button>
-    </div>
+    <div class="game-container">
+        <h1>🐍 SNAKE GAME</h1>
 
-    <div class="decorative-hearts heart1">💕</div>
-    <div class="decorative-hearts heart2">💖</div>
-    <div class="decorative-hearts heart3">💗</div>
-    <div class="decorative-hearts heart4">💝</div>
-
-    <!-- Many Floating Hearts -->
-    <div class="floating-hearts h1 heart-up">❤️</div>
-    <div class="floating-hearts h2 heart-up">💕</div>
-    <div class="floating-hearts h3 heart-up">💖</div>
-    <div class="floating-hearts h4 heart-up">💗</div>
-    <div class="floating-hearts h5 heart-up">💝</div>
-    <div class="floating-hearts h6 heart-up">❤️</div>
-    <div class="floating-hearts h7 heart-up">💕</div>
-    <div class="floating-hearts h8 heart-up">💖</div>
-    <div class="floating-hearts h9 heart-up">💗</div>
-    
-    <div class="floating-hearts h10 heart-left">💝</div>
-    <div class="floating-hearts h11 heart-left">❤️</div>
-    <div class="floating-hearts h12 heart-right">💕</div>
-    <div class="floating-hearts h13 heart-right">💖</div>
-    <div class="floating-hearts h14 heart-twirl">💗</div>
-    <div class="floating-hearts h15 heart-pulse">💝</div>
-
-    <!-- Animals -->
-    <div class="animal animal-dog">🐕</div>
-    <div class="animal animal-cat">🐈</div>
-    <div class="animal animal-rabbit">🐰</div>
-    <div class="animal animal-bear">🐻</div>
-    <div class="animal animal-fox">🦊</div>
-    <div class="animal animal-panda">🐼</div>
-
-    <div class="container">
-        <div class="heart-animation">⚡</div>
-        <h1>> NEURAL CONNECTION INIT...</h1>
-        <p class="message">
-            [SYSTEM ALERT] Probability Analysis Complete. Compatibility Rate: 99.9%. 
-            Synchronizing Hearts v2.0. Awaiting Your Acceptance to Bind Our Futures Together. 
-            Will Your Neural Network Interface Agree to This Unification?
-        </p>
-        <div class="button-group">
-            <button class="yes-btn" onclick="handleYes()">ACCEPT ✓</button>
-            <button class="no-btn" onclick="handleNo()">DECLINE ✗</button>
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Score</div>
+                <div class="score-value" id="score">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">High Score</div>
+                <div class="score-value" id="highScore">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Level</div>
+                <div class="score-value" id="level">1</div>
+            </div>
         </div>
 
-        <div class="success-message" id="successMessage">
-            <h1 style="color: #00ff99; text-shadow: 0 0 20px #00ff99;">◆ CONNECTION ESTABLISHED ◆</h1>
-            <p class="message">Neural synchronization complete! Welcome to the future. Together, we transcend reality. 💫</p>
+        <div class="game-status" id="gameStatus">Ready to Play!</div>
+
+        <div id="gameBoard"></div>
+
+        <div class="controls">
+            <button id="startBtn" onclick="startGame()">START GAME</button>
+            <button id="pauseBtn" onclick="togglePause()" style="display:none;">PAUSE</button>
+            <button onclick="resetGame()">RESET</button>
+        </div>
+
+        <div class="direction-buttons">
+            <button class="dir-btn up" onclick="changeDirection('UP')">⬆</button>
+            <button class="dir-btn left" onclick="changeDirection('LEFT')">⬅</button>
+            <button class="dir-btn down" onclick="changeDirection('DOWN')">⬇</button>
+            <button class="dir-btn right" onclick="changeDirection('RIGHT')">➡</button>
+        </div>
+
+        <div class="info">
+            Use arrow keys or buttons to control the snake. Eat food 🍎 to grow!
         </div>
     </div>
 
     <script>
-        let noClickCount = 0;
+        const BOARD_SIZE = 20;
+        const CELL_COUNT = BOARD_SIZE * BOARD_SIZE;
+        let gameBoard = document.getElementById('gameBoard');
+        let scoreDisplay = document.getElementById('score');
+        let highScoreDisplay = document.getElementById('highScore');
+        let levelDisplay = document.getElementById('level');
+        let gameStatusDisplay = document.getElementById('gameStatus');
 
-        const themes = {
-            rainbow: {
-                background: 'linear-gradient(135deg, #ff0000 0%, #ff7f00 16.66%, #ffff00 33.33%, #00ff00 50%, #0000ff 66.66%, #4b0082 83.33%, #9400d3 100%)',
-                buttonGrad: 'linear-gradient(135deg, #ff00ff 0%, #00ffff 50%, #ffff00 100%)',
-                confettiColor: '#ff00ff'
-            },
-            red: {
-                background: 'linear-gradient(135deg, #ff0000 0%, #ff6b6b 100%)',
-                buttonGrad: 'linear-gradient(135deg, #ff0000 0%, #ff4444 100%)',
-                confettiColor: '#ff0000'
-            },
-            orange: {
-                background: 'linear-gradient(135deg, #ff7f00 0%, #ffb84d 100%)',
-                buttonGrad: 'linear-gradient(135deg, #ff7f00 0%, #ff9933 100%)',
-                confettiColor: '#ff7f00'
-            },
-            yellow: {
-                background: 'linear-gradient(135deg, #ffff00 0%, #ffff99 100%)',
-                buttonGrad: 'linear-gradient(135deg, #ffff00 0%, #ffff66 100%)',
-                confettiColor: '#ffff00'
-            },
-            green: {
-                background: 'linear-gradient(135deg, #00ff00 0%, #66ff66 100%)',
-                buttonGrad: 'linear-gradient(135deg, #00ff00 0%, #33ff33 100%)',
-                confettiColor: '#00ff00'
-            },
-            blue: {
-                background: 'linear-gradient(135deg, #0000ff 0%, #6b6bff 100%)',
-                buttonGrad: 'linear-gradient(135deg, #0000ff 0%, #4444ff 100%)',
-                confettiColor: '#0000ff'
-            },
-            purple: {
-                background: 'linear-gradient(135deg, #9400d3 0%, #d966ff 100%)',
-                buttonGrad: 'linear-gradient(135deg, #9400d3 0%, #b833ff 100%)',
-                confettiColor: '#9400d3'
-            },
-            pink: {
-                background: 'linear-gradient(135deg, #ff00ff 0%, #ff66ff 100%)',
-                buttonGrad: 'linear-gradient(135deg, #ff00ff 0%, #ff44ff 100%)',
-                confettiColor: '#ff00ff'
+        let snake = [{ x: 10, y: 10 }];
+        let food = { x: 15, y: 15 };
+        let direction = 'RIGHT';
+        let nextDirection = 'RIGHT';
+        let score = 0;
+        let highScore = localStorage.getItem('snakeHighScore') || 0;
+        let level = 1;
+        let gameRunning = false;
+        let gamePaused = false;
+        let gameSpeed = 100;
+        let gameLoop;
+
+        highScoreDisplay.textContent = highScore;
+
+        function initializeBoard() {
+            gameBoard.innerHTML = '';
+            for (let i = 0; i < CELL_COUNT; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.id = `cell-${i}`;
+                gameBoard.appendChild(cell);
             }
-        };
+        }
 
-        let currentTheme = 'rainbow';
+        function positionToIndex(x, y) {
+            return y * BOARD_SIZE + x;
+        }
 
-        function changeTheme(themeName) {
-            const theme = themes[themeName];
-            if (!theme) return;
-
-            currentTheme = themeName;
-            document.body.style.background = theme.background;
-            document.querySelector('.yes-btn').style.background = theme.buttonGrad;
-
-            // Update active button indicator
-            document.querySelectorAll('.color-btn').forEach(btn => {
-                btn.classList.remove('active');
+        function draw() {
+            // Clear board
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                cell.className = 'cell';
             });
-            event.target.classList.add('active');
-        }
 
-        function handleYes() {
-            const container = document.querySelector('.container');
-            document.getElementById('successMessage').style.display = 'block';
-            container.style.animation = 'none';
-            createConfetti();
-        }
+            // Draw snake
+            snake.forEach((segment, index) => {
+                const index_pos = positionToIndex(segment.x, segment.y);
+                const cell = document.getElementById(`cell-${index_pos}`);
+                if (cell) {
+                    if (index === 0) {
+                        cell.className = 'cell snake head';
+                    } else {
+                        cell.className = 'cell snake';
+                    }
+                }
+            });
 
-        function handleNo() {
-            noClickCount++;
-            const noBtn = document.querySelector('.no-btn');
-            const yesBtn = document.querySelector('.yes-btn');
-
-            if (noClickCount === 1) {
-                noBtn.textContent = 'are you sure? 😢';
-            } else if (noClickCount === 2) {
-                noBtn.textContent = 'please say yes 🥺';
-            } else if (noClickCount === 3) {
-                noBtn.textContent = "I'm not giving up 😭";
-            } else if (noClickCount === 4) {
-                noBtn.textContent = 'one more chance? 💔';
-            } else if (noClickCount >= 5) {
-                yesBtn.style.transform = 'scale(1.3)';
-                yesBtn.style.flex = '2';
-                noBtn.style.opacity = '0.5';
-                noBtn.style.pointerEvents = 'none';
-                noBtn.textContent = 'Just click YES! 💕';
+            // Draw food
+            const foodIndex = positionToIndex(food.x, food.y);
+            const foodCell = document.getElementById(`cell-${foodIndex}`);
+            if (foodCell) {
+                foodCell.className = 'cell food';
             }
         }
 
-        function createConfetti() {
-            const theme = themes[currentTheme];
-            const colors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3', theme.confettiColor];
-            
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * window.innerWidth + 'px';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                confetti.style.animationDelay = Math.random() * 0.5 + 's';
-                document.body.appendChild(confetti);
+        function update() {
+            if (!gameRunning || gamePaused) return;
 
-                setTimeout(() => confetti.remove(), 4000);
+            direction = nextDirection;
+
+            // Calculate new head
+            let newHead = { ...snake[0] };
+            switch (direction) {
+                case 'UP':
+                    newHead.y = (newHead.y - 1 + BOARD_SIZE) % BOARD_SIZE;
+                    break;
+                case 'DOWN':
+                    newHead.y = (newHead.y + 1) % BOARD_SIZE;
+                    break;
+                case 'LEFT':
+                    newHead.x = (newHead.x - 1 + BOARD_SIZE) % BOARD_SIZE;
+                    break;
+                case 'RIGHT':
+                    newHead.x = (newHead.x + 1) % BOARD_SIZE;
+                    break;
+            }
+
+            // Check collision with self
+            if (snake.some(segment => segment.x === newHead.x && segment.y === newHead.y)) {
+                endGame();
+                return;
+            }
+
+            snake.unshift(newHead);
+
+            // Check if food is eaten
+            if (newHead.x === food.x && newHead.y === food.y) {
+                score += 10 * level;
+                scoreDisplay.textContent = score;
+
+                // Update high score
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('snakeHighScore', highScore);
+                    highScoreDisplay.textContent = highScore;
+                }
+
+                // Generate new food
+                generateFood();
+
+                // Increase level every 5 foods
+                if (score % 50 === 0) {
+                    level++;
+                    levelDisplay.textContent = level;
+                    gameSpeed = Math.max(30, 100 - (level - 1) * 10);
+                    clearInterval(gameLoop);
+                    gameLoop = setInterval(update, gameSpeed);
+                }
+            } else {
+                snake.pop();
+            }
+
+            draw();
+        }
+
+        function generateFood() {
+            let newFood;
+            let valid = false;
+            while (!valid) {
+                newFood = {
+                    x: Math.floor(Math.random() * BOARD_SIZE),
+                    y: Math.floor(Math.random() * BOARD_SIZE)
+                };
+                valid = !snake.some(segment => segment.x === newFood.x && segment.y === newFood.y);
+            }
+            food = newFood;
+        }
+
+        function changeDirection(newDirection) {
+            const opposites = {
+                'UP': 'DOWN',
+                'DOWN': 'UP',
+                'LEFT': 'RIGHT',
+                'RIGHT': 'LEFT'
+            };
+
+            if (opposites[newDirection] !== direction) {
+                nextDirection = newDirection;
             }
         }
+
+        function startGame() {
+            if (!gameRunning) {
+                gameRunning = true;
+                gamePaused = false;
+                document.getElementById('startBtn').style.display = 'none';
+                document.getElementById('pauseBtn').style.display = 'block';
+                gameStatusDisplay.textContent = '▶ Playing...';
+                gameStatusDisplay.className = 'game-status playing';
+                gameLoop = setInterval(update, gameSpeed);
+            }
+        }
+
+        function togglePause() {
+            gamePaused = !gamePaused;
+            document.getElementById('pauseBtn').textContent = gamePaused ? 'RESUME' : 'PAUSE';
+            gameStatusDisplay.textContent = gamePaused ? '⏸ Paused' : '▶ Playing...';
+        }
+
+        function endGame() {
+            gameRunning = false;
+            clearInterval(gameLoop);
+            document.getElementById('startBtn').style.display = 'block';
+            document.getElementById('pauseBtn').style.display = 'none';
+            document.getElementById('pauseBtn').textContent = 'PAUSE';
+            gameStatusDisplay.textContent = '💀 Game Over! Score: ' + score;
+            gameStatusDisplay.className = 'game-status game-over';
+        }
+
+        function resetGame() {
+            gameRunning = false;
+            gamePaused = false;
+            clearInterval(gameLoop);
+            snake = [{ x: 10, y: 10 }];
+            food = { x: 15, y: 15 };
+            direction = 'RIGHT';
+            nextDirection = 'RIGHT';
+            score = 0;
+            level = 1;
+            gameSpeed = 100;
+            scoreDisplay.textContent = '0';
+            levelDisplay.textContent = '1';
+            document.getElementById('startBtn').style.display = 'block';
+            document.getElementById('pauseBtn').style.display = 'none';
+            document.getElementById('pauseBtn').textContent = 'PAUSE';
+            gameStatusDisplay.textContent = 'Ready to Play!';
+            gameStatusDisplay.className = 'game-status';
+            draw();
+        }
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowUp':
+                    e.preventDefault();
+                    changeDirection('UP');
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    changeDirection('DOWN');
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    changeDirection('LEFT');
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    changeDirection('RIGHT');
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    if (gameRunning) togglePause();
+                    break;
+            }
+        });
+
+        // Initialize
+        initializeBoard();
+        draw();
     </script>
 </body>
 </html>
